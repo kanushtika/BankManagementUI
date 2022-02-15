@@ -1,0 +1,85 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card p-fluid">
+            <h5>Transaction</h5>
+            <div class="p-fluid p-formgrid grid">
+                <form class="width100" [formGroup]="transactionForm" (ngSubmit)="onSubmit()">
+                    <div class="field col-12 md:col-12 width100">
+                        <label htmlFor="customerName">Name</label>
+                        <span class="input-container-required"> *</span>
+                        <input pInputText type="text" id="customerName" formControlName="customerName"
+                            [required]="true" />
+                        <span class="help-block"
+                            *ngIf="!transactionForm.get('customerName').valid && transactionForm.get('customerName').touched">
+                            <span *ngIf="transactionForm.get('customerName').errors['required']">
+                                <p-message severity="error" text="Name is required"></p-message>
+
+                            </span>
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-12">
+                        <label htmlFor="accountNumber">Account Number</label>
+                        <span class="input-container-required"> *</span>
+                        <input pInputText type="text" id="accountNumber" formControlName="accountNumber"  (blur)="validateAccountNumber()" [ngStyle]="{ border: isValidAccount ? '1px solid #ff5757' : '' }"/>
+                        <span class="help-block"
+                        *ngIf="transactionForm.get('accountNumber').valid && transactionForm.get('accountNumber').touched">
+                        <span *ngIf="isValidAccount">
+                            <p-message severity="error" text="Account number is not exist"></p-message>
+
+                        </span>
+                        </span>
+                        <span class="help-block"
+                        *ngIf="!transactionForm.get('accountNumber').valid && transactionForm.get('accountNumber').touched">
+                       
+                            <span *ngIf="transactionForm.get('accountNumber').errors['required']">
+                                <p-message severity="error" text="Account number is required"></p-message>
+
+                            </span>
+                       
+                        </span>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="city">Transaction Type</label>
+                        <span class="input-container-required"> *</span>
+                        <p-dropdown [options]="dropdownItems" optionLabel="name" styleClass="form-control"
+                            formControlName="transactionType" id="transactionType" name="transactionType">
+                        </p-dropdown>
+                    </div>
+                   
+
+                    <div class="field col-12 md:col-12">
+                        <label htmlFor="transactionAmount">Amount</label>
+                        <span class="input-container-required"> *</span>
+                        <input pInputText type="text" id="transactionAmount" formControlName="transactionAmount" />
+                        <span class="help-block"
+                            *ngIf="!transactionForm.get('transactionAmount').valid && transactionForm.get('transactionAmount').touched">
+
+                            <span *ngIf="transactionForm.get('transactionAmount').errors['required']">
+                                <p-message severity="error" text="Amount is required"></p-message>
+
+                            </span>
+                        </span>
+                    </div>
+
+                </form>
+                <div class="col-12 md:col-12">
+                    <div class="styled_div">
+                        <div class="styled_button">
+                            <p-button [disabled]="!transactionForm.valid || isValidAccount" label="Submit" (onClick)="transferAmmount()"></p-button>
+                        </div>
+                        <div >
+                            <p-button label="cancel" (onClick)="clearTransaction()"></p-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+</div>
+<p-toast position="top-right"></p-toast>

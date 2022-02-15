@@ -1,0 +1,117 @@
+<p-dialog id="accountDialog" [(visible)]="accountDialogShown" modal="true" appendTo="body" [closable]="false"
+    [contentStyle]=" { 'min-width': '25vw', 'max-width': '50vw' }">
+    <p-header>Create Account</p-header>
+    <div class="grid">
+        <div class="col-12">
+            <div>
+                <div class="p-fluid p-formgrid grid">
+                    <form class="width100" [formGroup]="accountForm" (ngSubmit)="onSubmit()">
+                        <div class="field col-12 md:col-12 width100">
+                            <label htmlFor="firstname2">IdentityCardNo</label>
+                            <span class="input-container-required"> *</span>
+                            <input pInputText type="text" id="identityCardNo" formControlName="identityCardNo"
+                                [required]="true" (blur)="onBlur()" [ngStyle]="{ border: isValidIdentity ? '1px solid #ff5757' : '' }" />
+                                <span class="help-block"
+                                *ngIf="accountForm.get('identityCardNo').valid && accountForm.get('identityCardNo').touched">
+                                <span *ngIf="isValidIdentity">
+                                    <p-message severity="error" text="Customer is not exist"></p-message>
+        
+                                </span>
+                                </span>
+                            <span class="help-block"
+                                *ngIf="!accountForm.get('identityCardNo').valid && accountForm.get('identityCardNo').touched">
+                                <span *ngIf="accountForm.get('identityCardNo').errors['required']">
+                                    <p-message severity="error" text="IdentityCardNo is required"></p-message>
+
+                                </span>
+                            </span>
+                        </div>
+                        <div class="field col-12 md:col-12">
+                            <label htmlFor="lastname2">Name</label>
+                            <span class="input-container-required"> *</span>
+                            <input pInputText id="customerName" formControlName="customerName" type="text" readonly />
+                        </div>
+                        <div class="field col-12 md:col-6">
+                            <label htmlFor="city">Account Type</label>
+                            <span class="input-container-required"> *</span>
+                            <p-dropdown [options]="dropdownItems" optionLabel="name" styleClass="form-control"
+                                formControlName="accountType" id="accountType" name="accountType">
+                            </p-dropdown>
+                        </div>
+                        <div class="field col-12">
+                            <label htmlFor="address">Account No</label>
+                            <span class="input-container-required"> *</span>
+                            <input pInputText type="text" id="accountNumber" formControlName="accountNumber"
+                                [required]="true"  (blur)="validateAccountNumber()" [ngStyle]="{ border: isValidAccount ? '1px solid #ff5757' : '' }"/>
+                                <span class="help-block"
+                                *ngIf="accountForm.get('accountNumber').valid && accountForm.get('accountNumber').touched">
+                                <span *ngIf="isValidAccount">
+                                    <p-message severity="error" text="Account number is already exist"></p-message>
+        
+                                </span>
+                                </span>
+                            <span class="help-block"
+                                *ngIf="!accountForm.get('accountNumber').valid && accountForm.get('accountNumber').touched">
+                                <span *ngIf="accountForm.get('accountNumber').errors['required']">
+                                    <p-message severity="error" text="Account number is required"></p-message>
+
+                                </span>
+                            </span>
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p-footer>
+        <div>
+            <p-button [disabled]="!accountForm.valid || isValidIdentity || isValidAccount" label="Submit" (onClick)="createAccount()"></p-button>
+            <p-button label="cancel" (onClick)="closeAccountDialog()"></p-button>
+        </div>
+    </p-footer>
+</p-dialog>
+
+<div class="grid">
+    <div class="col-12">
+
+        <div class="col-12 xl:col-12">
+            <div class="card">
+                <div class="display-flex">
+                    <div>
+                        <h5>Accounts</h5>
+                    </div>
+
+                    <div class="button-style">
+                        <p-button label="Create New" (onClick)="createNewAccount()"></p-button>
+                    </div>
+
+                </div>
+                <p-table [value]="accountList" [paginator]="true" [rows]="5" responsiveLayout="scroll">
+                    <ng-template pTemplate="header">
+                        <tr>
+
+                            <th>Account No</th>
+                            <th>AccountType</th>
+                            <th>Created Date</th>
+
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-accountList>
+                        <tr>
+
+                            <td style="width: 25%; min-width: 7rem;">{{accountList.accountNumber}}</td>
+                            <td style="width: 25%; min-width: 7rem;">{{accountList.accountType}}</td>
+                            <td style="width: 25%; min-width: 7rem;">{{accountList.createdAt | date: ' dd.MM.yyyy' }}
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<p-toast position="top-right"></p-toast>

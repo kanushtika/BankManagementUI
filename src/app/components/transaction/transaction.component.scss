@@ -1,0 +1,18 @@
+input.ng-invalid.ng-touched{
+    border: 1px solid #ff5757;
+  }
+  .input-container-required{
+    color: #ff5757;
+      }
+    
+     ::ng-deep .p-inline-message.p-inline-message-error {
+        background: none;
+    }
+
+    .styled_div{
+      display: flex;
+    }
+
+    .styled_button{
+      padding-right: 20px;
+    }

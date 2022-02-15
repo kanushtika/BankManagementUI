@@ -1,0 +1,81 @@
+<p-orderList  *ngIf="showCustomer" [value]="customerList" [listStyle]="{'height':'auto'}" header="List of Customers" filterBy="customerName" filterPlaceholder="Filter by name" dragdrop="true" (onSelectionChange)="selectCustomer($event)">
+    <ng-template let-customerList pTemplate="item">
+        <div class="product-item">
+            <div class="product-list-detail">
+                <h5 class="p-mb-2">Customer Name: {{customerList.customerName}}</h5>
+                <i class="pi pi-calendar product-category-icon"></i>
+                <span class="product-category">{{customerList.createdAt | date: 'dd.MM.yyyy'}}</span>
+            </div>
+            <div class="product-list-action">
+                <h6 class="p-mb-2">NICNo: {{customerList.identityCardNo}}</h6>
+                <span>Email: {{customerList.email}}</span>
+                
+            </div>
+        </div>
+    </ng-template>
+</p-orderList>
+<div *ngIf="showAccount">
+    <div class="button-style">
+        <p-button label="Back" icon="pi pi-arrow-left" (onClick)="showCustomers()"></p-button>
+    </div>
+<p-orderList  [value]="accountList" [listStyle]="{'height':'auto'}" header="List of Accounts" filterBy="accountNumber" filterPlaceholder="Filter by account number" dragdrop="true" (onSelectionChange)="selectAccount($event)">
+    
+    <ng-template let-accountList pTemplate="item">
+        <div class="product-item">
+            <div class="product-list-detail">
+                <h5 class="p-mb-2">Account No: {{accountList.accountNumber}}</h5>
+                <i class="pi pi-calendar product-category-icon"></i>
+                <span class="product-category">{{accountList.createdAt | date: 'dd.MM.yyyy'}}</span>
+            </div>
+            <div class="product-list-action">
+                <h6 class="p-mb-2">Account Type: {{accountList.accountType}}</h6>
+                
+                
+            </div>
+        </div>
+    </ng-template>
+</p-orderList>
+</div>
+<div *ngIf="showTransaction">
+    <div class="button-style"><p-button icon="pi pi-arrow-left" label="Back" (onClick)="showAccounts()"></p-button></div> 
+<div class="grid">
+	<div class="col-12">
+
+        <div class="col-12 xl:col-12">
+            <div class="card">
+                <div class="display-flex">
+               <div><h5>Transaction Details</h5></div> 
+              
+            </div>
+                <p-table #dt [value]="transactions" [paginator]="true" [rows]="5" responsiveLayout="scroll" [globalFilterFields]="['transactionDate']">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="transactionDate">Transaction Date<p-sortIcon field="transactionDate"></p-sortIcon></th>
+                            <th>Transaction Type</th>
+                            <th>Amount </th>
+                            <th>Balance</th>
+                            
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-transactions>
+                        <tr>
+                            <td style="width: 25%; min-width: 7rem;"> {{transactions.transactionDate | date: ' dd.MM.yyyy HH:mm:ss'}} </td>
+                            <td style="width: 25%;" [ngStyle]="{ color: transactions.transactionType == 'deposit' ? '#29e129' : 'red' }"> 
+                                {{transactions.transactionType}} 
+                                
+                            </td>
+                            <td style="width: 25%; min-width: 8rem;" [ngStyle]="{ color: transactions.transactionType == 'deposit' ? '#29e129' : 'red' }">{{transactions.transactionAmount}}</td>
+                            <td style="width: 25%;">
+                                {{transactions.balance}} 
+                                
+                            </td>
+                            
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+          
+        </div>
+        </div>
+        </div>
+    </div>

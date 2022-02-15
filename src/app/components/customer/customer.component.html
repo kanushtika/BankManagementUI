@@ -1,0 +1,137 @@
+
+<p-dialog
+id="customerDialog"
+[(visible)]="customerDialogShown"
+modal="true"
+appendTo="body"
+[closable]="false"
+[contentStyle]=" { 'min-width': '30vw', 'max-width': '50vw' }"
+
+>
+<p-header>Create Customer</p-header>
+<div class="grid">
+    <div class="col-12">
+		<div>
+			
+			<div class="p-fluid p-formgrid grid">
+                <form class="width100" [formGroup]="customerForm" (ngSubmit)="onSubmit()">
+				<div class="field col-12 md:col-12 width100">
+					<label htmlFor="customerName">Name</label>
+                    <span class="input-container-required"> *</span>
+					<input pInputText  type="text" id="customerName" formControlName = "customerName"  />
+                    <span class="help-block" *ngIf="!customerForm.get('customerName').valid && customerForm.get('customerName').touched">
+						<span *ngIf = "customerForm.get('customerName').errors['required']">
+							<p-message
+							  severity="error"
+							  text="Name is required"
+							></p-message>
+						 
+                      </span>
+					  </span>
+				</div>
+				
+				<div class="field col-12 md:col-12">
+					<label htmlFor="identityCardNo">IdentityCardNo</label>
+                    <span class="input-container-required"> *</span>
+					<input  pInputText  type="text" id="identityCardNo" formControlName = "identityCardNo"  (blur)="validateIdentityNumber()" [ngStyle]="{ border: isValidIdentity ? '1px solid #ff5757' : '' }"/>
+                    <span class="help-block"
+                        *ngIf="customerForm.get('identityCardNo').valid && customerForm.get('identityCardNo').touched">
+                        <span *ngIf="isValidIdentity">
+                            <p-message severity="error" text="Customer is already exist"></p-message>
+
+                        </span>
+                        </span>
+					<span class="help-block" *ngIf="!customerForm.get('identityCardNo').valid && customerForm.get('identityCardNo').touched">
+                       
+						<span *ngIf = "customerForm.get('identityCardNo').errors['required']">
+							<p-message
+							  severity="error"
+							  text="IdentityCardNo is required"
+							></p-message>
+						 
+                      </span>
+                      <span *ngIf = "customerForm.controls.identityCardNo.errors?.not_allowed_characters">
+                        <p-message
+                          severity="error"
+                          text="Customer is already exist"
+                        ></p-message>
+                     
+                  </span>
+                      </span>
+				</div>
+
+				<div class="field col-12 md:col-12">
+					<label htmlFor="email">Email</label>
+                    <span class="input-container-required"> *</span>
+					<input pInputText  type="text" id="email" formControlName = "email"/>
+                    <span class="help-block" *ngIf="!customerForm.get('email').valid && customerForm.get('email').touched">
+                       
+						<span *ngIf = "customerForm.get('email').errors['required']">
+							<p-message
+							  severity="error"
+							  text="Email is required"
+							></p-message>
+						 
+                      </span>
+                      <span *ngIf = "customerForm.get('email').errors['email']">
+                        <p-message
+                          severity="error"
+                          text="Email is not valid"
+                        ></p-message>
+                     
+                  </span>
+                      </span>
+				</div>
+                
+                </form>
+			</div>
+		</div>
+	</div>
+</div>
+<p-footer>
+    <div >
+        <p-button [disabled]="!customerForm.valid || isValidIdentity" label="Submit" (onClick)="createCustomer()"></p-button>
+        <p-button label="cancel" (onClick)="closeDialog()"></p-button>
+    </div>
+  </p-footer>
+</p-dialog>
+<div class="grid">
+	<div class="col-12">
+
+        <div class="col-12 xl:col-12">
+            <div class="card">
+                <div class="display-flex">
+               <div><h5>Customers</h5></div> 
+               <div class="button-style"><p-button label="Create New" (onClick)="createNew()"></p-button></div> 
+            </div>
+                <p-table [value]="customerList" [paginator]="true" [rows]="5" responsiveLayout="scroll">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+                            <th>NICNo </th>
+                            <th>Email</th>
+                            <th>Created Date</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-customerList>
+                        <tr>
+                            <td style="width: 25%; min-width: 7rem;">{{customerList.customerName}}</td>
+                            <td style="width: 25%; min-width: 8rem;">{{customerList.identityCardNo}}</td>
+                            <td style="width: 25%;">
+                                {{customerList.email}} 
+                                
+                            </td>
+                            <td style="width: 25%;">
+                                {{customerList.createdAt | date: ' dd.MM.yyyy'}} 
+                                
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+          
+        </div>
+        </div>
+        </div>
+
+        <p-toast position="top-right"></p-toast>
